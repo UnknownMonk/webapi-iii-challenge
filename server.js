@@ -8,7 +8,7 @@ const user = require('./user/userRoutes');
 server.use(express.json());
 
 server.use('/api/posts', posts);
-server.use('/api/posts', user);
+server.use('/api/user', user);
 server.use('/', (req, res) => {
   res.status(200).json('Express home route');
 });
