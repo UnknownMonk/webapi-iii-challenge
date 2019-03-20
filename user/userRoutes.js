@@ -2,11 +2,22 @@ const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/userDb');
 
+const userNameUpper = (req, res, next) => {
+  if (req.body.name) {
+    req.body.name = req.body.name
+      .toLowerCase()
+      .split(' ')
+      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ');
+  }
+  next();
+};
+
 router.use(express.json());
 
-router.post('/', (req, res) => {
-  const { title, contents } = req.body;
-  if (!title || !contents) {
+router.post('/', userNameUpper, (req, res) => {
+  const { name } = req.body;
+  if (!name) {
     res.status(400).json({
       errorMessage: 'Please provide title and contents for the post.'
     });
@@ -71,7 +82,7 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', userNameUpper, (req, res) => {
   const { id } = req.params;
   const { title, contents } = req.body;
   if (title && contents) {
