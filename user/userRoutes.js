@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../data/seeds/02-users');
+const db = require('../data/helpers/userDb');
 
 router.use(express.json());
 
@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  db.find()
+  db.get()
     .then(posts => {
       res.status(200).json({ 'Here are your posts': posts });
     })
@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  db.findById(id)
+  db.getUserPosts(id)
     .then(post => {
       if (post.length > 0) {
         res.status(200).json(post);
@@ -97,25 +97,6 @@ router.put('/:id', (req, res) => {
       errorMessage: 'Please provide title and contents for the post.'
     });
   }
-});
-
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  db.getUserPosts(id)
-    .then(post => {
-      if (post.length > 0) {
-        res.status(200).json(post);
-      } else {
-        res
-          .status(404)
-          .json({ message: 'The post with the specified ID does not exist.' });
-      }
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: 'The post information could not be retrieved.' });
-    });
 });
 
 module.exports = router;

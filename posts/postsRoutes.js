@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../data/seeds/03-posts');
+const db = require('../data/helpers/postDb');
 
 router.use(express.json());
 
@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  db.find()
+  db.get()
     .then(posts => {
       res.status(200).json({ 'Here are your posts': posts });
     })
@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  db.findById(id)
+  db.getById(id)
     .then(post => {
       if (post.length > 0) {
         res.status(200).json(post);
