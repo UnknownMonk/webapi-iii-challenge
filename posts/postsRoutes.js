@@ -5,8 +5,8 @@ const db = require('../data/helpers/postDb');
 router.use(express.json());
 
 router.post('/', (req, res) => {
-  const { title, contents } = req.body;
-  if (!title || !contents) {
+  const { text } = req.body;
+  if (!text) {
     res.status(400).json({
       errorMessage: 'Please provide title and contents for the post.'
     });
@@ -73,9 +73,9 @@ router.delete('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const { id } = req.params;
-  const { title, contents } = req.body;
-  if (title && contents) {
-    db.update(id, { title, contents })
+  const { text } = req.body;
+  if (text) {
+    db.update(id, { text })
       .then(count => {
         if (count) {
           db.findById(id).then(updatedPost => {
